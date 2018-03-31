@@ -10,12 +10,12 @@ item {
 
 item {
   id: 3
-  name: 'GreenLeft'
+  name: 'Yellow'
 }
 
 item {
   id: 4
-  name: 'GreenRight'
+  name: 'off'
 }
 
 item {
@@ -30,12 +30,12 @@ item {
 
 item {
   id: 7
-  name: 'Yellow'
+  name: 'GreenLeft'
 }
 
 item {
   id: 8
-  name: 'off'
+  name: 'GreenRight'
 }
 
 item {
