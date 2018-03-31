@@ -4,6 +4,7 @@ import glob
 import cv2
 import tensorflow as tf
 from object_detection.utils import dataset_util 
+from tqdm import tqdm
 
 #Define flags for input and output paths
 flags = tf.app.flags
@@ -91,9 +92,9 @@ def main(_):
   
   #Write the output TFRecord
   print('Writing TFRecord to: ', FLAGS.output_path)    
-  examples = train_annotations[:20]  
+  n_examples = len(train_annotations)  
   #Annotation keys are 'path' and 'boxes'  
-  for example in examples:
+  for example in tqdm(train_annotations, total=n_examples):
     #Fix path for images
     relative_image_path = example['path'][2:].replace('/', os.path.sep)
     example['path'] = os.path.join(train_data_folder, relative_image_path)
