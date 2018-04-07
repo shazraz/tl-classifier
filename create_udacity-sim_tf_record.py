@@ -45,7 +45,7 @@ def create_tf_example(example):
     train_classes = {"Green" : 1, 
                            "Red" : 2, 
                            "Yellow" : 3, 
-                           "off" : 4, 
+                           "off" : 4 
                           }
     
     height = 600 # Image height
@@ -69,10 +69,10 @@ def create_tf_example(example):
     
     #Bosch box keys are ['occluded', 'label', 'y_max', 'x_max', 'y_min', 'x_min']
     for box in example['annotations']:
-        xmins.append(box['xmin']/float(width))
-        xmaxs.append(box['xmax']/float(width))
-        ymins.append(box['ymin']/float(height))
-        ymaxs.append(box['ymax']/float(height))
+        xmins.append(box['xmin'])
+        xmaxs.append(box['xmax'])
+        ymins.append(box['ymin'])
+        ymaxs.append(box['ymax'])
         classes_text.append(box['class'].encode())
         classes.append(int(train_classes[box['class']]))
     
@@ -119,6 +119,7 @@ def main(_):
 				tf_example = create_tf_example(example)
 				writer.write(tf_example.SerializeToString())
 				#Create examples from the augmented data
+		
 				for i in range(aug_factor):
 					new_sample = {}
 					new_path = os.path.join(train_data_folder, 'augmented', example['filename'].split(os.path.sep)[-1].split('.')[0]+'_'+str(i)+'.jpg')
@@ -129,9 +130,11 @@ def main(_):
 					new_sample['filename'] = new_path
 					#print('Writing augmented image to path: ', new_path)
 					cv2.imwrite(new_path, cv2.cvtColor(image_jitter, cv2.COLOR_RGB2BGR)) 
-					tf_example = create_tf_example(example)
+					tf_example = create_tf_example(new_sample)
 					writer.write(tf_example.SerializeToString())
+
 			#Don't augment red images
+			
 			else:
 				tf_example = create_tf_example(example)
 				writer.write(tf_example.SerializeToString())
@@ -139,6 +142,7 @@ def main(_):
 			#print('Skipping empty sample')
 			tf_example = create_tf_example(example)
 			writer.write(tf_example.SerializeToString())
+			
 	print('Data written successfully.')
 	writer.close()
   
